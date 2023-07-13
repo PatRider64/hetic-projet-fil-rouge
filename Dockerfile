@@ -12,4 +12,8 @@ RUN pecl install apcu && docker-php-ext-enable apcu
 
 WORKDIR /var/www
 
+WORKDIR /var/www/html
+COPY ./symfony_project/composer.json .
+RUN composer install
+
 CMD nginx && php-fpm
