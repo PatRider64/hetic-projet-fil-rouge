@@ -7,26 +7,34 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserSiteRepository::class)]
-class UserSite
+#[UniqueEntity(fields: ['email'], message: 'Cet e-mail existe déjà')]
+class UserSite implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('main')]
     private ?int $id = null;
 
     #[ORM\Column(length: 32)]
+    #[Groups('main')]
     private ?string $name = null;
 
     #[ORM\Column(length: 32)]
+    #[Groups('main')]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 60)]
     private ?string $email = null;
 
-    #[ORM\Column(nullable: true)]
-    private array $type = [];
+    #[ORM\Column]
+    private array $roles = [];
 
     #[ORM\Column(nullable: true)]
     private ?int $videoCount = null;
@@ -51,6 +59,9 @@ class UserSite
 
     #[ORM\ManyToMany(targetEntity: Challenge::class, mappedBy: 'userSite')]
     private Collection $challenges;
+
+    #[ORM\Column(length: 100)]
+    private ?string $password = null;
 
     public function __construct()
     {
@@ -101,14 +112,17 @@ class UserSite
         return $this;
     }
 
-    public function getType(): array
+    public function getRoles(): array
     {
-        return $this->type;
+        $roles = $this->roles;
+
+        $roles[] = 'ROLE_USER';
+        return array_unique($roles);
     }
 
-    public function setType(?array $type): static
+    public function setRoles(array $roles): static
     {
-        $this->type = $type;
+        $this->roles = $roles;
 
         return $this;
     }
@@ -290,5 +304,17 @@ class UserSite
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
+
+        return $this;
     }
 }

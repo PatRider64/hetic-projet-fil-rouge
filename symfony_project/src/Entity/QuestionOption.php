@@ -19,6 +19,9 @@ class QuestionOption
     #[ORM\Column(length: 150)]
     private ?string $option = null;
 
+    #[ORM\Column]
+    private ?bool $answer = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,18 @@ class QuestionOption
     public function setOption(string $option): static
     {
         $this->option = $option;
+
+        return $this;
+    }
+
+    public function isAnswer(): ?bool
+    {
+        return $this->answer;
+    }
+
+    public function setAnswer(bool $answer): static
+    {
+        $this->answer = $answer;
 
         return $this;
     }
