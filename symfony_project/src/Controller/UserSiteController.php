@@ -63,7 +63,7 @@ class UserSiteController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_user_site_update_api', methods: ['POST'])]
-    public function update(Request $request, UserSite $user, UserSiteRepository $userSiteRepository, $id): Response
+    public function update(Request $request, UserSite $user, $id): Response
     {
         $user->setName($request->request->get('name'))
             ->setFirstName($request->request->get('firstName'))

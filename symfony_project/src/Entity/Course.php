@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CourseRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
 class Course
@@ -12,12 +13,15 @@ class Course
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('main')]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups('main')]
     private ?string $title = null;
 
     #[ORM\ManyToOne(inversedBy: 'courses')]
+    #[Groups('main')]
     private ?userSite $teacher = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
