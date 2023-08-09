@@ -45,15 +45,15 @@ class CourseController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_course_show')]
-    public function show(CourseRepository $courseRepository, $id)
+    public function show(Course $course)
     {
         return $this->json([
-            'user' => $courseRepository->findBy(['id' => $id])
+            'course' => $course
         ], 200, [], ['groups' => 'main']);
     }
 
     #[Route('/{id}/edit', name: 'app_course_update_api', methods: ['POST'])]
-    public function update(Request $request, Course $course, $id): Response
+    public function update(Request $request, Course $course): Response
     {
         $course->setTitle($request->request->get('title'))
             ->setContent($request->request->get('content'));

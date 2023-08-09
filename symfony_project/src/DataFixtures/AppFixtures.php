@@ -4,6 +4,9 @@ namespace App\DataFixtures;
 
 use App\Factory\UserSiteFactory;
 use App\Factory\CourseFactory;
+use App\Factory\MasterclassFactory;
+use App\Factory\CompositorFactory;
+use App\Factory\MusicSheetFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -13,5 +16,8 @@ class AppFixtures extends Fixture
     {
         UserSiteFactory::createMany(30);
         CourseFactory::createMany(10);
+        CompositorFactory::createMany(20);
+        MusicSheetFactory::createMany(25);
+        MasterclassFactory::createMany(10);
     }
 }

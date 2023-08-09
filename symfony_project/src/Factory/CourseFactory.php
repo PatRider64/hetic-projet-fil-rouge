@@ -4,7 +4,7 @@ namespace App\Factory;
 
 use App\Entity\Course;
 use App\Repository\CourseRepository;
-use App\Repository\UserSysTimeRepository;
+use App\Repository\UserSiteRepository;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
 use Zenstruck\Foundry\RepositoryProxy;
@@ -30,14 +30,10 @@ use Zenstruck\Foundry\RepositoryProxy;
  */
 final class CourseFactory extends ModelFactory
 {
-    /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
-     *
-     * @todo inject services if required
-     */
-    public function __construct()
+    public function __construct(UserSiteRepository $userSiteRepository)
     {
         parent::__construct();
+        $this->userSiteRepository = $userSiteRepository;
     }
 
     /**
@@ -47,9 +43,18 @@ final class CourseFactory extends ModelFactory
      */
     protected function getDefaults(): array
     {
+        $users = $this->userSiteRepository->findAll();
+        $teachers = [];
+        
+        foreach ($users as $user) {
+            if (in_array("TEACHER", $user->getRoles())) {
+                array_push($teachers, $user);
+            }
+        }
+
         return [
             'title' => self::faker()->text(50),
-            'teacher' => UserSiteFactory::random(),
+            'teacher' => self::faker()->randomElement($teachers),
             'content' => self::faker()->text()
         ];
     }

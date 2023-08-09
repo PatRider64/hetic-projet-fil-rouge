@@ -34,7 +34,7 @@ class UserSiteController extends AbstractController
             ->setPassword($this->passwordHasher->hashPassword($user, $form->getData()->getPassword()))
             ->setRoles([$request->request->get('type')]);
 
-        if ($request->request->get('type') == 'eleve') {
+        if ($request->request->get('type') == 'STUDENT') {
             $user->setCoursesTaken(0)
                 ->setQuizzesCompleted([])
                 ->setVideoCount(0);
@@ -55,15 +55,15 @@ class UserSiteController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_user_site_show')]
-    public function show(UserSiteRepository $userSiteRepository, $id): Response
+    public function show(UserSite $user): Response
     {
         return $this->json([
-            'user' => $userSiteRepository->findBy(['id' => $id])
+            'user' => $user
         ], 200, [], ['groups' => 'main']);
     }
 
     #[Route('/{id}/edit', name: 'app_user_site_update_api', methods: ['POST'])]
-    public function update(Request $request, UserSite $user, $id): Response
+    public function update(Request $request, UserSite $user): Response
     {
         $user->setName($request->request->get('name'))
             ->setFirstName($request->request->get('firstName'))
@@ -76,7 +76,7 @@ class UserSiteController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_user_site_delete', methods: ['POST'])]
-    public function delete(Request $request, UserSite $user, UserSiteRepository $userSiteRepository, $id): Response
+    public function delete(Request $request, UserSite $user, UserSiteRepository $userSiteRepository): Response
     {
         if (!$user) {
             return $this->redirectToRoute('app_error');

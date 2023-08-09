@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\MasterclassRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: MasterclassRepository::class)]
 class Masterclass
@@ -12,12 +13,15 @@ class Masterclass
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('main')]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups('main')]
     private ?string $analysis = null;
 
     #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    #[Groups('main')]
     private array $instruments = [];
 
     #[ORM\ManyToOne(inversedBy: 'masterclasses')]

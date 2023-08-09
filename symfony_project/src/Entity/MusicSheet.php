@@ -6,6 +6,8 @@ use App\Repository\MusicSheetRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use App\Service\UploadHelper;
 
 #[ORM\Entity(repositoryClass: MusicSheetRepository::class)]
 class MusicSheet
@@ -13,6 +15,7 @@ class MusicSheet
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('main')]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'musicSheets')]
@@ -25,6 +28,7 @@ class MusicSheet
     private ?string $fileName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('main')]
     private ?string $originalFileName = null;
 
     #[ORM\Column(length: 50, nullable: true)]
@@ -116,5 +120,10 @@ class MusicSheet
         $this->mimeType = $mimeType;
 
         return $this;
+    }
+
+    public function getFilePath(): string
+    {
+        return '/' . UploadHelper::MUSIC_SHEET_PATH . '/' . $this->getFilename();
     }
 }

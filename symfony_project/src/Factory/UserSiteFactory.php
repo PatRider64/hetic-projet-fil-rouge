@@ -30,11 +30,9 @@ use Zenstruck\Foundry\RepositoryProxy;
  */
 final class UserSiteFactory extends ModelFactory
 {
-    /**
-     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
-     *
-     * @todo inject services if required
-     */
+    private $hasher;
+    private static $roles = ['STUDENT', 'TEACHER'];
+
     public function __construct(UserPasswordHasherInterface $hasher)
     {
         parent::__construct();
@@ -53,7 +51,8 @@ final class UserSiteFactory extends ModelFactory
             'firstName' => self::faker()->firstName(),
             'name' => self::faker()->lastName(),
             'videoCount' => self::faker()->numberBetween(0, 20),
-            'coursesTaken' => self::faker()->numberBetween(0, 20)
+            'coursesTaken' => self::faker()->numberBetween(0, 20),
+            'roles' => [self::faker()->randomElement(self::$roles)]
         ];
     }
 
