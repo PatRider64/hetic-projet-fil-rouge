@@ -6,6 +6,7 @@ use App\Repository\QuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
 class Question
@@ -19,10 +20,24 @@ class Question
     private ?Quiz $quiz = null;
 
     #[ORM\Column(length: 150)]
+    #[Groups('main')]
     private ?string $question = null;
 
-    #[ORM\OneToMany(mappedBy: 'question', targetEntity: QuestionOption::class)]
-    private Collection $questionOptions;
+    #[ORM\Column(length: 100)]
+    private ?string $option1 = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $option2 = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $option3 = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $option4 = null;
+
+    #[ORM\Column(length: 100)]
+    #[Groups('main')]
+    private ?string $answer = null;
 
     public function __construct()
     {
@@ -58,32 +73,62 @@ class Question
         return $this;
     }
 
-    /**
-     * @return Collection<int, QuestionOption>
-     */
-    public function getQuestionOptions(): Collection
+    public function getOption1(): ?string
     {
-        return $this->questionOptions;
+        return $this->option1;
     }
 
-    public function addQuestionOption(QuestionOption $questionOption): static
+    public function setOption1(string $option1): static
     {
-        if (!$this->questionOptions->contains($questionOption)) {
-            $this->questionOptions->add($questionOption);
-            $questionOption->setQuestion($this);
-        }
+        $this->option1 = $option1;
 
         return $this;
     }
 
-    public function removeQuestionOption(QuestionOption $questionOption): static
+    public function getOption2(): ?string
     {
-        if ($this->questionOptions->removeElement($questionOption)) {
-            // set the owning side to null (unless already changed)
-            if ($questionOption->getQuestion() === $this) {
-                $questionOption->setQuestion(null);
-            }
-        }
+        return $this->option2;
+    }
+
+    public function setOption2(string $option2): static
+    {
+        $this->option2 = $option2;
+
+        return $this;
+    }
+
+    public function getOption3(): ?string
+    {
+        return $this->option3;
+    }
+
+    public function setOption3(string $option3): static
+    {
+        $this->option3 = $option3;
+
+        return $this;
+    }
+
+    public function getOption4(): ?string
+    {
+        return $this->option4;
+    }
+
+    public function setOption4(string $option4): static
+    {
+        $this->option4 = $option4;
+
+        return $this;
+    }
+
+    public function getAnswer(): ?string
+    {
+        return $this->answer;
+    }
+
+    public function setAnswer(string $answer): static
+    {
+        $this->answer = $answer;
 
         return $this;
     }
