@@ -81,4 +81,16 @@ class QuizController extends AbstractController
             'message' => 'Votre score est de '.$score.' points.'
         ]);
     }
+
+    #[Route('/{id}', name: 'app_quiz_delete', methods: ['POST'])]
+    public function delete(Request $request, Quiz $quiz, QuizRepository $quizRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $quiz->getId(), $request->request->get('_token'))) {
+            $quizRepository->remove($quiz, true);
+        }
+
+        return $this->json([
+            'message' => 'La suppression du quiz a été réalisée avec succés.'
+        ]);
+    }
 }
