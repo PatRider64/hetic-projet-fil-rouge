@@ -9,6 +9,8 @@ use App\Factory\CompositorFactory;
 use App\Factory\MusicSheetFactory;
 use App\Factory\QuizFactory;
 use App\Factory\QuestionFactory;
+use App\Factory\ChatFactory;
+use App\Factory\MessageFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -23,5 +25,7 @@ class AppFixtures extends Fixture
         MasterclassFactory::createMany(10);
         QuizFactory::createMany(10);
         QuestionFactory::createMany(40);
+        ChatFactory::createMany(10);
+        MessageFactory::createMany(40);
     }
 }
