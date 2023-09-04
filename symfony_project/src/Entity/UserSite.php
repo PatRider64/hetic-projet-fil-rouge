@@ -63,12 +63,16 @@ class UserSite implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 100)]
     private ?string $password = null;
 
+    #[ORM\OneToMany(mappedBy: 'userSite', targetEntity: Subscription::class)]
+    private Collection $subscriptions;
+
     public function __construct()
     {
         $this->courses = new ArrayCollection();
         $this->masterclasses = new ArrayCollection();
         $this->messages = new ArrayCollection();
         $this->challenges = new ArrayCollection();
+        $this->subscriptions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -314,6 +318,36 @@ class UserSite implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Subscription>
+     */
+    public function getSubscriptions(): Collection
+    {
+        return $this->subscriptions;
+    }
+
+    public function addSubscription(Subscription $subscription): static
+    {
+        if (!$this->subscriptions->contains($subscription)) {
+            $this->subscriptions->add($subscription);
+            $subscription->setUserSite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscription(Subscription $subscription): static
+    {
+        if ($this->subscriptions->removeElement($subscription)) {
+            // set the owning side to null (unless already changed)
+            if ($subscription->getUserSite() === $this) {
+                $subscription->setUserSite(null);
+            }
+        }
 
         return $this;
     }
