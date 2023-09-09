@@ -1,6 +1,8 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
+import Phrases from "../components/Phrases";
+import Footer from "../components/Footer";
 
 function Home () {
     return (
@@ -15,7 +17,11 @@ function Home () {
             url="/"
             btnClass="show"
             />
+            <Phrases/>
+            <Footer/>
+
         </div>
+
     );
 }
 
