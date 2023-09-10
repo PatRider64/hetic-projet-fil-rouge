@@ -45,7 +45,7 @@ class QuizController extends AbstractController
         ], 200, [], ['groups' => 'main']);
     }
 
-    #[Route('/{id}/edit', name: 'app_quiz_show')]
+    #[Route('/{id}/edit', name: 'app_quiz_update_api')]
     public function edit(Request $request, EntityManagerInterface $entityManager, Quiz $quiz) : Reponse
     {
         $quiz->setTitle($request->request->get('title'))

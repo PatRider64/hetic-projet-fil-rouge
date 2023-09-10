@@ -75,6 +75,6 @@ class CompositorController extends AbstractController
             $compositorRepository->remove($compositor, true);
         }
 
-        return $this->redirectToRoute('app_compositor_index', [], Response::HTTP_SEE_OTHER);
+        return $this->json(['message' => 'La suppression du profil du compositeur a été réalisé avec succés']);
     }
 }
