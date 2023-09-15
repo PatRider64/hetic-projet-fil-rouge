@@ -5,18 +5,21 @@ security:
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         users_in_memory: { memory: null }
+        user:
+            entity:
+                class: 'App\Entity\UserSite'
+                property: 'email'
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             lazy: true
-            provider: users_in_memory
+            provider: user
             custom_authenticator: App\Security\LoginFormAuthenticator
             logout:
                 path: app_logout
-                # where to redirect after logout
-                # target: app_any_route
+                target: /
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -29,6 +32,10 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/app_user_site_show, roles: ROLE_USER }
+        - { path: ^/app_course, roles: SUBSCRIBER }
+        - { path: ^/app_masterclass, roles: SUBSCRIBER }
+        - { path: ^/app_chat, roles: SUBSCRIBER }
+        - { path: ^/, roles: PUBLIC_ACCESS }
 
 when@test:
     security:
