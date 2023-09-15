@@ -1,7 +1,11 @@
 // import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {Button} from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles.css";
+import 'tailwindcss/tailwind.css'; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Home from './pages/Home';
 import Masterclass from './pages/MasterclassV';
@@ -22,7 +26,7 @@ import SignIn from './pages/SignIn';
         <Route path= "/enregistrer" element={<SignIn/>}/>
       </Routes>
 
-
+      
 
     </div>
 

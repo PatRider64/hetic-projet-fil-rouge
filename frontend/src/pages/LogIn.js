@@ -6,7 +6,8 @@ function logIn () {
     return (
         <div>
             <Navbar/>
-            <h1>logIn</h1>
+            <h1 >logIn</h1>
+             
             <Footer/>
         </div>
     )
