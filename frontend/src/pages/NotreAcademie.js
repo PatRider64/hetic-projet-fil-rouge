@@ -2,7 +2,9 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 // import MasterImg from "../assets/piano.jpg";
+import NotreHistoire from "../components/NotreHistoire";
 import Footer from "../components/Footer";
+import Newsletter from "../components/Newsletter";
 
 function notreAcademie () {
     return (
@@ -12,12 +14,14 @@ function notreAcademie () {
                 cName="hero"
                 MusiSaline="./assets/piano.jpg"
                 title="Académie de musique classique"
-                text="Profitez d'une semaine de masterclass avec les plus grands professeurs de musique classique"
-                buttonText="S'inscrire à l'académie"
+                text="Apprenez et progressez aux côtés des meilleurs professeurs"
+                buttonText=""
                 url="/"
-                btnClass="show"
+                btnClass="/"
                 
             />
+            <NotreHistoire/>
+            <Newsletter/>
             <Footer/>
         </div>
     );

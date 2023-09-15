@@ -3,23 +3,6 @@ import "./NavbarStyles.css";
 import {Link} from "react-router-dom";
 import {MenuItems} from "./MenuItems";
 
-// function Navbar() {
-//   return (
-//     <div>
-//         <nav className='navbar'>
-//             <div className='navbar-container'>
-//                 <link to="/" className="navbar-logo">
-//                 TRVL
-//                 </link>
-//             </div>
-//         </nav>
-      
-//     </div>
-//   )
-// }
-
-// export default Navbar
-
 
 class Navbar extends Component {
   state = {clicked: false};
@@ -29,7 +12,7 @@ class Navbar extends Component {
   render(){
     return(
       <nav className='NavbarItems'>
-        <h1 className='navbar-logo'>Academie</h1>
+        <h1 className='navbar-logo'>Saline</h1>
         <div className='menu-icons' onClick={this.handleClick}>
           <i className={this.state.clicked ? "fas fa-times" : "fas fa-bars"}></i>
 
@@ -56,3 +39,15 @@ class Navbar extends Component {
 }
 
 export default Navbar; 
+
+
+// const NavBar = () => {
+//   return(
+//     <div className='text-white'>
+//         <h1>REACT</h1>
+//     </div>
+
+//   )
+// }
+
+// export default Navbar

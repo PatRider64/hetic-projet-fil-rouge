@@ -7,6 +7,7 @@ import EnSavoirPlus from "../components/EnSavoirPlus";
 import Offres from "../components/Offres";
 import Newsletter from "../components/Newsletter";
 
+
 function Home () {
     return (
         <div>
