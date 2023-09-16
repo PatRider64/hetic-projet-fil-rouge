@@ -98,45 +98,54 @@ class UserSiteController extends AbstractController
     #[Route('{id}/subscription', name: 'app_user_site_subscription', methods: ['POST'])]
     public function subscription(Request $request, UserSite $user)
     {
-        $dateStart = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
-        $typeSubscription = $request->request->get('subscription');
+        if ($this->isGranted('SUBSCRIBER')) {
+            return $this->json(['message' => 'Vous vous êtes déjà abonné']);
+        } else {
+            $dateStart = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+            $typeSubscription = $request->request->get('subscription');
 
-        switch($typeSubscription) {
-            case 'freeTrial':
-                $dateEnd = $dateStart->modify('+1 month');
-                $type = 'Free trial';
-                $amount = 0;
-                break;
-            case 'monthly':
-                $dateEnd = $dateStart->modify('+1 month');
-                $type = 'Monthly';
-                $amount = 20;
-                break;
-            case 'yearly':
-                $dateEnd = $dateStart->modify('+1 year');
-                $type = 'Yearly';
-                $amount = 190;
+            switch($typeSubscription) {
+                case 'freeTrial':
+                    if ($this->isGranted('FIRST_TRIAL')) {
+                        return $this->json(['message' => 'L\'essai gratuit n\'est plus disponible']);
+                    } else {
+                        $dateEnd = $dateStart->modify('+1 month');
+                        $type = 'Free trial';
+                        $amount = 0;
+                        array_push($user->getRoles(), 'FIRST_TRIAL');
+                        break;
+                    }
+                case 'monthly':
+                    $dateEnd = $dateStart->modify('+1 month');
+                    $type = 'Monthly';
+                    $amount = 20;
+                    break;
+                case 'yearly':
+                    $dateEnd = $dateStart->modify('+1 year');
+                    $type = 'Yearly';
+                    $amount = 190;
+            }
+
+            $user->setDateExpiration($dateEnd);
+            array_push($user->getRoles(), 'SUBSCRIBER');
+
+            $subscription = new Subscription;
+            $subscription->setUserSite($user)
+                ->setDateStart($dateStart)
+                ->setDateEnd($dateEnd)
+                ->setType($type);
+            ;
+            $entityManager->persist($subscription);
+
+            $invoice = new Invoice;
+            $invoice->setDateInvoice($dateStart)
+                ->setAmount($amount)
+            ;
+            $entityManager->persist($invoice);
+            $subscription->setInvoice($invoice);
+            $entityManager->flush();
+
+            return $this->json(['message' => 'Vous êtes maintenant abonné']);
         }
-
-        $user->setDateExpiration($dateEnd);
-        array_push($user->getRoles(), 'SUBSCRIBER');
-
-        $subscription = new Subscription;
-        $subscription->setUserSite($user)
-            ->setDateStart($dateStart)
-            ->setDateEnd($dateEnd)
-            ->setType($type);
-        ;
-        $entityManager->persist($subscription);
-
-        $invoice = new Invoice;
-        $invoice->setDateInvoice($dateStart)
-            ->setAmount($amount)
-        ;
-        $entityManager->persist($invoice);
-        $subscription->setInvoice($invoice);
-        $entityManager->flush();
-
-        return $this->json(['message' => 'Vous êtes maintenant abonné']);
     }
 }
