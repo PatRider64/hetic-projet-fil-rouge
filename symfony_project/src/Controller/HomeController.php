@@ -23,8 +23,7 @@ class HomeController extends AbstractController
         $userSite = $this->security->getUser();
 
         if($userSite) {
-            if ($userSite->getDateExpiration()->format('Y-m-d') == $date->format('Y-m-d') && 
-            in_array('SUBSCRIBER', $userSite->getRoles())) {
+            if ($userSite->getDateExpiration()->format('Y-m-d') == $date->format('Y-m-d') && $this->isGranted('SUBSCRIBER')) {
                 array_diff($userSite->getRoles(), ['SUBSCRIBER']);
             }
         }
