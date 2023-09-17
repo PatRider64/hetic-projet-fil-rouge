@@ -47,7 +47,7 @@ final class CourseFactory extends ModelFactory
         $teachers = [];
         
         foreach ($users as $user) {
-            if (in_array("TEACHER", $user->getRoles())) {
+            if (in_array("ROLE_TEACHER", $user->getRoles())) {
                 array_push($teachers, $user);
             }
         }
