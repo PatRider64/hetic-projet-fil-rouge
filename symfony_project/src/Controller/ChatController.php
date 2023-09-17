@@ -5,10 +5,12 @@ namespace App\Controller;
 use App\Entity\Chat;
 use App\Entity\Message;
 use App\Repository\ChatRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Request;
 
 #[Route('chat')]
 class ChatController extends AbstractController
@@ -49,7 +51,7 @@ class ChatController extends AbstractController
         $entityManager->flush();
 
         return $this->json([
-            'message' => 'La création du topic à été réalisée avec succés.'
+            'message' => 'La creation du topic a ete realisee avec succes.'
         ]);
     }
 
@@ -64,12 +66,10 @@ class ChatController extends AbstractController
     #[Route('/{id}', name: 'app_chat_delete', methods: ['POST'])]
     public function delete(Request $request, Chat $chat, ChatRepository $chatRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $chat->getId(), $request->request->get('_token'))) {
-            $chatRepository->remove($chat, true);
-        }
+        $chatRepository->remove($chat, true);
 
         return $this->json([
-            'message' => 'Topic supprimé.'
+            'message' => 'Topic supprime.'
         ]);
     }
 }

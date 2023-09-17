@@ -18,7 +18,7 @@ class Message
 
     #[ORM\ManyToOne(inversedBy: 'messages')]
     #[Groups('main')]
-    private ?userSite $userSite = null;
+    private ?UserSite $userSite = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups('main')]
@@ -36,12 +36,12 @@ class Message
         return $this->id;
     }
 
-    public function getUserSite(): ?userSite
+    public function getUserSite(): ?UserSite
     {
         return $this->userSite;
     }
 
-    public function setUserSite(?userSite $userSite): static
+    public function setUserSite(?UserSite $userSite): static
     {
         $this->userSite = $userSite;
 

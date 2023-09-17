@@ -5,10 +5,12 @@ namespace App\Controller;
 use App\Entity\Message;
 use App\Repository\MessageRepository;
 use App\Repository\ChatRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Request;
 
 #[Route('message')]
 class MessageController extends AbstractController
@@ -33,7 +35,7 @@ class MessageController extends AbstractController
     $chatId): Response 
     {
         $userSite = $this->security->getUser();
-        $chat = $chatRepository->findBy(['id' => $chatId]);
+        $chat = $chatRepository->findBy(['id' => $chatId])[0];
 
         //Création du message
         $message = new Message();
@@ -59,11 +61,10 @@ class MessageController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_message_delete', methods: ['POST'])]
-    public function delete(Request $request, Message $message, MessageRepository $messageRepository): Response
+    public function delete(EntityManagerInterface $entityManager, Request $request, Message $message, 
+    MessageRepository $messageRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $message->getId(), $request->request->get('_token'))) {
-            $messageRepository->remove($message, true);
-        }
+        $messageRepository->remove($message, true);
 
         return $this->json([
             'message' => 'Message supprimé.'
