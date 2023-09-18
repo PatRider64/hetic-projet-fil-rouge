@@ -52,7 +52,8 @@ final class UserSiteFactory extends ModelFactory
             'name' => self::faker()->lastName(),
             'videoCount' => self::faker()->numberBetween(0, 20),
             'coursesTaken' => self::faker()->numberBetween(0, 20),
-            'roles' => [self::faker()->randomElement(self::$roles)]
+            'roles' => [self::faker()->randomElement(self::$roles)],
+            'freeTrialUsed' => self::faker()->boolean()
         ];
     }
 

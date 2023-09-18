@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ContestRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ContestRepository::class)]
 class Contest
@@ -39,21 +40,27 @@ class Contest
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Groups('main')]
     private ?string $seasonality = null;
 
     #[ORM\Column(length: 100, nullable: true)]
+    #[Groups('main')]
     private ?string $phone = null;
 
     #[ORM\Column(length: 200)]
+    #[Groups('main')]
     private ?string $address = null;
 
     #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    #[Groups('main')]
     private ?array $winners = null;
 
     #[ORM\Column(type: Types::ARRAY, nullable: true)]
-    private ?array $juries = null;
+    #[Groups('main')]
+    private ?array $judges = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups('main')]
     private ?string $description = null;
 
     public function getId(): ?int
@@ -181,14 +188,14 @@ class Contest
         return $this;
     }
 
-    public function getJuries(): ?array
+    public function getJudges(): ?array
     {
-        return $this->juries;
+        return $this->judges;
     }
 
-    public function setJuries(?array $juries): static
+    public function setJudges(?array $judges): static
     {
-        $this->juries = $juries;
+        $this->judges = $judges;
 
         return $this;
     }

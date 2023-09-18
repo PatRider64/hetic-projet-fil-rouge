@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
-use App\Security\LoginFormAuthenticator;
 use Symfony\Component\HttpFoundation\Request;
 
 #[Route('/course')]
@@ -33,7 +32,7 @@ class CourseController extends AbstractController
     #[Route('/create', name: 'app_course_create_api', methods: ['POST'])]
     public function create(EntityManagerInterface $entityManager, Request $request)
     {
-        $course = new Course;
+        $course = new Course();
         $course->setTitle($request->request->get('title'))
             ->setTeacher($this->security->getUser())
             ->setContent($request->request->get('content'));

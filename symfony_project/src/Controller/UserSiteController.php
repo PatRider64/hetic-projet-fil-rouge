@@ -39,7 +39,7 @@ class UserSiteController extends AbstractController
             ->setRoles([$request->request->get('type')])
             ->setFreeTrialUsed(false);
 
-        if ($request->request->get('type') == 'STUDENT') {
+        if ($request->request->get('type') == 'ROLE_STUDENT') {
             $user->setCoursesTaken(0)
                 ->setQuizzesCompleted([])
                 ->setVideoCount(0);
@@ -123,7 +123,7 @@ class UserSiteController extends AbstractController
             $user->setExpirationDate($dateEnd);
             $user->setRoles(['ROLE_SUBSCRIBER']);
 
-            $subscription = new Subscription;
+            $subscription = new Subscription();
             $subscription->setUserSite($user)
                 ->setDateStart($dateStart)
                 ->setDateEnd($dateEnd)
@@ -131,7 +131,7 @@ class UserSiteController extends AbstractController
             ;
             $entityManager->persist($subscription);
 
-            $invoice = new Invoice;
+            $invoice = new Invoice();
             $invoice->setDateInvoice($dateStart)
                 ->setAmount($amount)
             ;

@@ -5,8 +5,10 @@ namespace App\Controller;
 use App\Entity\Contest;
 use App\Repository\ContestRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 #[Route('contest')]
 class ContestController extends AbstractController
@@ -26,21 +28,23 @@ class ContestController extends AbstractController
 
         $contest->setName($request->request->get('name'))
             ->setCountry($request->request->get('country'))
-            ->City($request->request->get('birthDate'))
-            ->setInstrument($request->request->get('intrument'))
-            ->setPrice($request->request->get('price'))
-            ->setDate($request->request->get('date'))
+            ->setCity($request->request->get('city'))
+            ->setInstrument($request->request->get('instrument'))
+            ->setPrize($request->request->get('prize'))
+            ->setDate(new \DateTime($request->request->get('date')))
             ->setDescription($request->request->get('description'))
             ->setSeasonality($request->request->get('seasonality'))
             ->setPhone($request->request->get('phone'))
             ->setAddress($request->request->get('address'))
+            ->setJudges([])
+            ->setWinners([]);
         ;
 
         $entityManager->persist($contest);
         $entityManager->flush();
 
         return $this->json([
-            'message' => 'La création du concours a été réalisé avec succés'
+            'message' => 'La creation du concours a ete realise avec succes'
         ]);
     }
 
@@ -53,14 +57,14 @@ class ContestController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_contest_update_api', methods: ['POST'])]
-    public function update(Request $request, Compositor $compositor, CompositorRepository $compositorRepository): Response
+    public function update(EntityManagerInterface $entityManager, Request $request, Contest $contest): Response
     {
-        $compositor->setName($request->request->get('name'))
+        $contest->setName($request->request->get('name'))
             ->setCountry($request->request->get('country'))
-            ->City($request->request->get('birthDate'))
-            ->setInstrument($request->request->get('intrument'))
-            ->setPrice($request->request->get('price'))
-            ->setDate($request->request->get('date'))
+            ->setCity($request->request->get('city'))
+            ->setInstrument($request->request->get('instrument'))
+            ->setPrize($request->request->get('prize'))
+            ->setDate(new \DateTime($request->request->get('date')))
             ->setDescription($request->request->get('description'))
             ->setSeasonality($request->request->get('seasonality'))
             ->setPhone($request->request->get('phone'))
@@ -69,23 +73,21 @@ class ContestController extends AbstractController
 
         $entityManager->flush();
 
-        return $this->json(['message' => 'La modification du concours a été réalisé avec succés']);
+        return $this->json(['message' => 'La modification du concours a ete realise avec succes']);
     }
 
     #[Route('/{id}', name: 'app_constest_delete', methods: ['POST'])]
     public function delete(Request $request, Contest $contest, ContestRepository $contestRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $contest->getId(), $request->request->get('_token'))) {
-            $contestRepository->remove($contest, true);
-        }
+        $contestRepository->remove($contest, true);
 
         return $this->json([
-            'message' => 'Concours supprimé.'
+            'message' => 'Concours supprime.'
         ]);
     }
 
     #[Route('/{id}/judges', name: 'app_contest_judges_api', methods: ['POST'])]
-    public function judges(Request $request, Contest $contest, ContestRepository $contestRepository): Response
+    public function judges(EntityManagerInterface $entityManager, Request $request, Contest $contest): Response
     {
         $judge = [];
         $name = $request->request->get('name');
@@ -94,16 +96,18 @@ class ContestController extends AbstractController
         $nationality = $request->request->get('nationality');
 
         array_push($judge, $name, $status, $instrument, $nationality);
-        array_push($contest->getJuries(), $judge);
+        $judges = $contest->getJudges();
+        array_push($judges, $judge);
+        $contest->setJudges($judges);
         $entityManager->flush();
 
         return $this->json([
-            'message' => 'Juge ajouté.'
+            'message' => 'Juge ajoute.'
         ]);
     }
 
     #[Route('/{id}/winners', name: 'app_contest_winners_api', methods: ['POST'])]
-    public function winners(Request $request, Contest $contest, ContestRepository $contestRepository): Response
+    public function winners(EntityManagerInterface $entityManager, Request $request, Contest $contest): Response
     {
         $winner = [];
         $name = $request->request->get('name');
@@ -113,11 +117,13 @@ class ContestController extends AbstractController
         $school = $request->request->get('school');
 
         array_push($winner, $name, $prize, $instrument, $nationality, $school);
-        array_push($contest->getWinners(), $winner);
+        $winners = $contest->getWinners();
+        array_push($winners, $winner);
+        $contest->setWinners($winners);
         $entityManager->flush();
 
         return $this->json([
-            'message' => 'Gagnant ajouté.'
+            'message' => 'Gagnant ajoute.'
         ]);
     }
 }
