@@ -1,8 +1,10 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
+import Plateforme from "../components/Plateforme";
 // import MasterImg from "../assets/piano.jpg";
 import Footer from "../components/Footer";
+import Professeurs from "../components/Professeurs";
 
 function masterClassV () {
     return (
@@ -17,6 +19,8 @@ function masterClassV () {
                 url="/"
                 btnClass="show"
             />
+            <Plateforme/>
+            <Professeurs/>
             <Footer/>
 
         </div>
