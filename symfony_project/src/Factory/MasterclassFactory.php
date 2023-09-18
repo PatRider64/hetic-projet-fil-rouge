@@ -48,24 +48,18 @@ final class MasterclassFactory extends ModelFactory
 
     protected function getDefaults(): array
     {
-        $intrumentsNumber = rand(1, 3);
-        $intrumentsArray = [];
-        for ($i = 0; $i < $intrumentsNumber; $i++) {
-            array_push($intrumentsArray, self::faker()->randomElement(self::$instruments));
-        }
-
         $users = $this->userSiteRepository->findAll();
         $students = [];
         
         foreach ($users as $user) {
-            if (in_array("STUDENT", $user->getRoles())) {
+            if (in_array("ROLE_STUDENT", $user->getRoles())) {
                 array_push($students, $user);
             }
         }
 
         return [
             'analysis' => self::faker()->text(),
-            'instruments' => $intrumentsArray,
+            'instruments' => self::faker()->randomElement(self::$instruments),
             'student' => self::faker()->randomElement($students),
             'musicSheet' => MusicSheetFactory::random()
         ];

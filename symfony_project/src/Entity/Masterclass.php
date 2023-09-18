@@ -20,9 +20,9 @@ class Masterclass
     #[Groups('main')]
     private ?string $analysis = null;
 
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups('main')]
-    private array $instruments = [];
+    private ?string $instruments = null;
 
     #[ORM\ManyToOne(inversedBy: 'masterclasses')]
     private ?UserSite $student = null;
@@ -47,12 +47,12 @@ class Masterclass
         return $this;
     }
 
-    public function getInstruments(): array
+    public function getInstruments(): ?string
     {
         return $this->instruments;
     }
 
-    public function setInstruments(?array $instruments): static
+    public function setInstruments(?string $instruments): static
     {
         $this->instruments = $instruments;
 

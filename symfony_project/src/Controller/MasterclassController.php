@@ -4,10 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Masterclass;
 use App\Repository\MasterclassRepository;
+use App\Repository\UserSiteRepository;
+use App\Repository\MusicSheetRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 #[Route('/masterclass')]
 class MasterclassController extends AbstractController
@@ -21,20 +24,25 @@ class MasterclassController extends AbstractController
     }
 
     #[Route('/create', name: 'app_masterclass_create_api', methods: ['POST'])]
-    public function create(Request $request, EntityManagerInterface $entityManager): Response 
+    public function create(Request $request, EntityManagerInterface $entityManager, UserSiteRepository $userRepository,
+    MusicSheetRepository $musicSheetRepository): Response 
     {
         $masterclass = new Masterclass();
+        $studentId = $request->request->get('student');
+        $musicSheetId = $request->request->get('musicSheet');
+        $student = $userRepository->findBy(['id' => $studentId])[0];
+        $musicSheet = $musicSheetRepository->findBy(['id' => $musicSheetId])[0];
 
-        $user->setAnalysis($request->request->get('analysis'))
+        $masterclass->setAnalysis($request->request->get('analysis'))
             ->setInstruments($request->request->get('instruments'))
-            ->setStudent($request->request->get('student'))
-            ->setMusicSheet([$request->request->get('musicSheet')]);
+            ->setStudent($student)
+            ->setMusicSheet($musicSheet);
 
         $entityManager->persist($masterclass);
         $entityManager->flush();
 
         return $this->json([
-            'message' => 'Le masterclass a été créé'
+            'message' => 'Le masterclass a ete cree'
         ]);
     }
 
@@ -47,15 +55,21 @@ class MasterclassController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_masterclass_update_api', methods: ['POST'])]
-    public function update(Request $request, Masterclass $masterclass): Response
+    public function update(EntityManagerInterface $entityManager, Request $request, Masterclass $masterclass,
+    UserSiteRepository $userRepository, MusicSheetRepository $musicSheetRepository): Response
     {
-        $user->setAnalysis($request->request->get('analysis'))
+        $studentId = $request->request->get('student');
+        $musicSheetId = $request->request->get('musicSheet');
+        $student = $userRepository->findBy(['id' => $studentId])[0];
+        $musicSheet = $musicSheetRepository->findBy(['id' => $musicSheetId])[0];
+        
+        $masterclass->setAnalysis($request->request->get('analysis'))
             ->setInstruments($request->request->get('instruments'))
-            ->setStudent($request->request->get('student'))
-            ->setMusicSheet([$request->request->get('musicSheet')]);
+            ->setStudent($student)
+            ->setMusicSheet($musicSheet);
 
         $entityManager->flush();
 
-        return $this->json(['message' => 'La modification du masterclass a été réalisé avec succés']);
+        return $this->json(['message' => 'La modification du masterclass a ete realise avec succes']);
     }
 }

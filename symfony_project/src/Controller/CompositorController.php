@@ -5,10 +5,12 @@ namespace App\Controller;
 use App\Entity\Compositor;
 use App\Repository\CompositorRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 
-#[Route('compositor')]
+#[Route('/compositor')]
 class CompositorController extends AbstractController
 {
     #[Route('/', name: 'app_compositor_index')]
@@ -19,22 +21,22 @@ class CompositorController extends AbstractController
         ], 200, [], ['groups' => 'main']);
     }
 
-    #[Route('/create', name: 'app_user_create_api', methods: ['POST'])]
+    #[Route('/create', name: 'app_compositor_create_api', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager): Response 
     {
         $compositor = new Compositor();
 
         $compositor->setName($request->request->get('name'))
             ->setFirstName($request->request->get('firstName'))
-            ->setBirthDate($request->request->get('birthDate'))
-            ->setDeathDate($request->request->get('deathDate'))
+            ->setBirthDate(new \DateTime($request->request->get('birthDate')))
+            ->setDeathDate(new \DateTime($request->request->get('deathDate')))
             ->setBiography($request->request->get('biography'));
 
         $entityManager->persist($compositor);
         $entityManager->flush();
 
         return $this->json([
-            'message' => 'La création du profil du compositeur a été réalisé avec succés'
+            'message' => 'La creation du profil du compositeur a ete realise avec succes'
         ]);
     }
 
@@ -47,34 +49,25 @@ class CompositorController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_compositor_update_api', methods: ['POST'])]
-    public function update(Request $request, Compositor $compositor, CompositorRepository $compositorRepository): Response
+    public function update(EntityManagerInterface $entityManager, Request $request, Compositor $compositor, 
+    CompositorRepository $compositorRepository): Response
     {
         $compositor->setName($request->request->get('name'))
             ->setFirstName($request->request->get('firstName'))
-            ->setBirthDate($request->request->get('birthDate'))
-            ->setDeathDate($request->request->get('deathDate'))
+            ->setBirthDate(new \DateTime($request->request->get('birthDate')))
+            ->setDeathDate(new \DateTime($request->request->get('deathDate')))
             ->setBiography($request->request->get('biography'));
 
         $entityManager->flush();
 
-        return $this->json(['message' => 'La modification du profil du compositeur a été réalisé avec succés']);
+        return $this->json(['message' => 'La modification du profil du compositeur a ete realise avec succes']);
     }
 
     #[Route('/{id}', name: 'app_compositor_delete', methods: ['POST'])]
     public function delete(Request $request, Compositor $compositor, CompositorRepository $compositorRepository): Response
     {
-        if (!$compositor) {
-            return $this->redirectToRoute('app_error');
-        }
+        $compositorRepository->remove($compositor, true);
 
-        if (strval($this->getUser()->getId()) !== $id && !$this->security->isGranted('ROLE_ADMIN')) {
-            return $this->redirect($request->headers->get('referer'));
-        }
-
-        if ($this->isCsrfTokenValid('delete' . $compositor->getId(), $request->request->get('_token'))) {
-            $compositorRepository->remove($compositor, true);
-        }
-
-        return $this->json(['message' => 'La suppression du profil du compositeur a été réalisé avec succés']);
+        return $this->json(['message' => 'La suppression du profil du compositeur a ete realise avec succes']);
     }
 }
