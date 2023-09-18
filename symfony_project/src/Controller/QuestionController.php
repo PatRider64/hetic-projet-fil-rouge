@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\Question;
 use App\Repository\QuizRepository;
 use App\Repository\QuestionRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 class QuestionController extends AbstractController
 {
@@ -23,9 +25,11 @@ class QuestionController extends AbstractController
     public function createQuestion(Request $request, EntityManagerInterface $entityManager, 
     QuizRepository $quizRepository, $quizId) : Response
     {
-        $quiz = $quizRepository->findBy(['id' => $quizId]);
+        $quiz = $quizRepository->findBy(['id' => $quizId])[0];
         $question = new Question();
-        $question->setOption1($request->request->get('option1'))
+
+        $question->setQuestion($request->request->get('question'))
+            ->setOption1($request->request->get('option1'))
             ->setOption2($request->request->get('option2'))
             ->setOption3($request->request->get('option3'))
             ->setOption4($request->request->get('option4'));
@@ -52,7 +56,7 @@ class QuestionController extends AbstractController
         $entityManager->flush();
         
         return $this->json([
-            'message' => 'Question ajoutée'
+            'message' => 'Question ajoutee'
         ]);
     }
 }

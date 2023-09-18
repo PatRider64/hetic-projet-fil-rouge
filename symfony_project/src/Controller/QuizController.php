@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Quiz;
 use App\Repository\QuizRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Request;
 
 #[Route('/quiz')]
 class QuizController extends AbstractController
@@ -27,18 +29,22 @@ class QuizController extends AbstractController
         ], 200, [], ['groups' => 'main']);
     }
 
-    #[Route('/create', name: 'app_quiz_index_api', methods: ['POST'])]
+    #[Route('/create', name: 'app_quiz_create_api', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager) : Response
     {
         $quiz = new Quiz();
+
+        $quiz->setTitle($request->request->get('title'))
+            ->setDescription($request->request->get('description'));
+        
         $entityManager->persist($quiz);
         $entityManager->flush();
 
-        return $this->json(['message' => 'La création du quiz a été réalisée avec succés']);
+        return $this->json(['message' => 'La creation du quiz a ete realisee avec succes']);
     }
 
     #[Route('/{id}', name: 'app_quiz_show')]
-    public function show(Quiz $quiz) : Reponse
+    public function show(Quiz $quiz) : Response
     {
         return $this->json([
             'quiz' => $quiz
@@ -46,7 +52,7 @@ class QuizController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_quiz_update_api')]
-    public function edit(Request $request, EntityManagerInterface $entityManager, Quiz $quiz) : Reponse
+    public function edit(Request $request, EntityManagerInterface $entityManager, Quiz $quiz) : Response
     {
         $quiz->setTitle($request->request->get('title'))
             ->setDescription($request->request->get('description'));
@@ -54,12 +60,13 @@ class QuizController extends AbstractController
         $entityManager->flush();
     
         return $this->json([
-            'message' => 'La modification du quiz a été réalisée avec succés'
+            'message' => 'La modification du quiz a ete realisee avec succes'
         ]);
     }
 
     #[Route('/{id}/result', name: 'app_quiz_result', methods: ['POST'])]
-    public function result(Quiz $quiz) {
+    public function result(Quiz $quiz, Request $request, EntityManagerInterface $entityManager) : Response
+    {
         $user = $this->security->getUser();
         $score = 0;
         $questions = $quiz->getQuestions();
@@ -74,7 +81,9 @@ class QuizController extends AbstractController
             $i++;
         }
         
-        array_push($user->getQuizzesCompleted(), [$quiz->getTitle(), $score]);
+        $quizzes = $user->getQuizzesCompleted();
+        array_push($quizzes, [$quiz->getTitle(), $score.'/'.$i-1]);
+        $user->setQuizzesCompleted($quizzes);
         $entityManager->flush();
 
         return $this->json([
@@ -85,12 +94,10 @@ class QuizController extends AbstractController
     #[Route('/{id}', name: 'app_quiz_delete', methods: ['POST'])]
     public function delete(Request $request, Quiz $quiz, QuizRepository $quizRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $quiz->getId(), $request->request->get('_token'))) {
-            $quizRepository->remove($quiz, true);
-        }
+        $quizRepository->remove($quiz, true);
 
         return $this->json([
-            'message' => 'La suppression du quiz a été réalisée avec succés.'
+            'message' => 'La suppression du quiz a ete réalisee avec succes.'
         ]);
     }
 }
