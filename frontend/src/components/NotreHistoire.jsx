@@ -2,14 +2,14 @@ import React from "react";
 
 const NotreHistoire = () => {
     return (
-        <div name="about" className="w-full h-screen bg-white text-black">
-            <div className="max-w-screen-lg p-4 mx-auto flex flex-col justify-center w-full h-full">
-                <div className="text-4xl font-bold inline border-b-4 border-gray-500">
+        <div name="about" className="bg-white text-black py-6 lg:py-12">
+            <div className="max-w-screen-lg p-4 mx-auto flex flex-col justify-center">
+                <div className="text-4xl font-bold inline border-b-4 border-gray-500 mb-6">
                     <p>Notre Histoire</p>
                 </div>
                 
 
-                <p className="text-xl mt-20 text-justify">Projet dans le cadre de l’Appel à Manifestations d’Intérêt (AMI) de l’Etat français pour investir dans des projets innovants de valorisation de la culture et du patrimoine par le numérique.
+                <p className="text-xl mt-4 mb-10 text-justify">Projet dans le cadre de l’Appel à Manifestations d’Intérêt (AMI) de l’Etat français pour investir dans des projets innovants de valorisation de la culture et du patrimoine par le numérique.
 
                     Saline royale Academy, portée par la société Music@mpus, a pour objectif de participer à la formation des meilleurs musiciens de demain:
 
@@ -22,7 +22,7 @@ const NotreHistoire = () => {
 
                 <br />
 
-                <p className="text-xl text-justify">Il ne s’agit pas d’apprendre la musique à des débutants mais de donner à un public de jeunes musiciens talentueux des outils de progression technique et stylistique, des avantages pour leur concours, des moyens de s’évaluer dans une compétition internationale, un parcours pour s’orienter dans un monde musical professionnel complexe.
+                <p className="text-xl text-justify my-4">Il ne s’agit pas d’apprendre la musique à des débutants mais de donner à un public de jeunes musiciens talentueux des outils de progression technique et stylistique, des avantages pour leur concours, des moyens de s’évaluer dans une compétition internationale, un parcours pour s’orienter dans un monde musical professionnel complexe.
 
                 <br/>La création d’une plateforme web de diffusion online de masterclass de musique classique de haut niveau et de studios de captation audiovisuelle numérique  est cofinancée par le FEDER à hauteur de 60,49% du projet soit 999 688,00 € HT ». Plus d'informations sur www.europe-bfc.eu</p>
             </div>

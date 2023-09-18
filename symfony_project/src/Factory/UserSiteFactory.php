@@ -31,7 +31,7 @@ use Zenstruck\Foundry\RepositoryProxy;
 final class UserSiteFactory extends ModelFactory
 {
     private $hasher;
-    private static $roles = ['STUDENT', 'TEACHER'];
+    private static $roles = ['ROLE_STUDENT', 'ROLE_TEACHER', 'ROLE_SUBSCRIBER'];
 
     public function __construct(UserPasswordHasherInterface $hasher)
     {

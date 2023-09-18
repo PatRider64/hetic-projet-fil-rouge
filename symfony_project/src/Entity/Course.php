@@ -22,7 +22,7 @@ class Course
 
     #[ORM\ManyToOne(inversedBy: 'courses')]
     #[Groups('main')]
-    private ?userSite $teacher = null;
+    private ?UserSite $teacher = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $content = null;
@@ -44,12 +44,12 @@ class Course
         return $this;
     }
 
-    public function getTeacher(): ?userSite
+    public function getTeacher(): ?UserSite
     {
         return $this->teacher;
     }
 
-    public function setTeacher(?userSite $teacher): static
+    public function setTeacher(?UserSite $teacher): static
     {
         $this->teacher = $teacher;
 

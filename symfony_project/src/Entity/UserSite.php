@@ -66,6 +66,9 @@ class UserSite implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'userSite', targetEntity: Subscription::class)]
     private Collection $subscriptions;
 
+    #[ORM\Column]
+    private ?bool $freeTrialUsed = null;
+
     public function __construct()
     {
         $this->courses = new ArrayCollection();
@@ -348,6 +351,18 @@ class UserSite implements UserInterface, PasswordAuthenticatedUserInterface
                 $subscription->setUserSite(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isFreeTrialUsed(): ?bool
+    {
+        return $this->freeTrialUsed;
+    }
+
+    public function setFreeTrialUsed(bool $freeTrialUsed): static
+    {
+        $this->freeTrialUsed = $freeTrialUsed;
 
         return $this;
     }

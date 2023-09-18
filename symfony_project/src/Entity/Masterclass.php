@@ -25,7 +25,7 @@ class Masterclass
     private array $instruments = [];
 
     #[ORM\ManyToOne(inversedBy: 'masterclasses')]
-    private ?userSite $student = null;
+    private ?UserSite $student = null;
 
     #[ORM\ManyToOne(inversedBy: 'masterclass')]
     private ?MusicSheet $musicSheet = null;
@@ -59,12 +59,12 @@ class Masterclass
         return $this;
     }
 
-    public function getStudent(): ?userSite
+    public function getStudent(): ?UserSite
     {
         return $this->student;
     }
 
-    public function setStudent(?userSite $student): static
+    public function setStudent(?UserSite $student): static
     {
         $this->student = $student;
 

@@ -11,7 +11,7 @@ import Masterclass from './pages/MasterclassV';
 import NotreAcademie from './pages/NotreAcademie';
 import PreparerConcours from './pages/PreparerConcours';
 import LogIn from './pages/LogIn';
-import SignIn from './pages/SignIn';
+import SignIn from './pages/SignUp';
 
  export default function App () {
    return (

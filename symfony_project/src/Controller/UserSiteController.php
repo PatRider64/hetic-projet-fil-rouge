@@ -11,7 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Security\LoginFormAuthenticator;
+use Symfony\Component\HttpFoundation\Request;
 
 #[Route('/user_site')]
 class UserSiteController extends AbstractController
@@ -24,23 +26,24 @@ class UserSiteController extends AbstractController
         ], 200, [], ['groups' => 'main']);
     }
 
-    #[Route('/create', name: 'app_user_create_api', methods: ['POST'])]
+    #[Route('/create', name: 'app_user_site_create_api', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager, UserAuthenticatorInterface $authenticator, 
-    LoginFormAuthenticator $formAuthenticator): Response 
+    LoginFormAuthenticator $formAuthenticator, UserPasswordHasherInterface $hasher): Response 
     {
         $user = new UserSite();
 
         $user->setName($request->request->get('name'))
             ->setFirstName($request->request->get('firstName'))
             ->setEmail($request->request->get('email'))
-            ->setPassword($this->passwordHasher->hashPassword($user, $form->getData()->getPassword()))
-            ->setRoles([$request->request->get('type')]);
+            ->setPassword($hasher->hashPassword($user, $request->request->get('password')))
+            ->setRoles([$request->request->get('type')])
+            ->setFreeTrialUsed(false);
 
         if ($request->request->get('type') == 'STUDENT') {
             $user->setCoursesTaken(0)
                 ->setQuizzesCompleted([])
                 ->setVideoCount(0);
-        }    
+        }
 
         $entityManager->persist($user);
         $entityManager->flush();
@@ -52,7 +55,7 @@ class UserSiteController extends AbstractController
         );
 
         return $this->json([
-            'message' => 'L’inscription est réussie'
+            'message' => 'L’inscription est reussie'
         ]);
     }
 
@@ -65,78 +68,78 @@ class UserSiteController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_user_site_update_api', methods: ['POST'])]
-    public function update(Request $request, UserSite $user): Response
+    public function update(Request $request, UserSite $user, EntityManagerInterface $entityManager,
+    UserPasswordHasherInterface $hasher): Response
     {
         $user->setName($request->request->get('name'))
             ->setFirstName($request->request->get('firstName'))
             ->setEmail($request->request->get('email'))
-            ->setPassword($this->passwordHasher->hashPassword($user, $form->getData()->getPassword()));
+            ->setPassword($hasher->hashPassword($user, $request->request->get('password')));
 
         $entityManager->flush();
 
-        return $this->json(['message' => 'La modification de votre compte a été réalisé avec succés']);
+        return $this->json(['message' => 'La modification de votre compte a ete realise avec succes']);
     }
 
     #[Route('/{id}', name: 'app_user_site_delete', methods: ['POST'])]
     public function delete(Request $request, UserSite $user, UserSiteRepository $userSiteRepository): Response
     {
-        if (!$user) {
-            return $this->redirectToRoute('app_error');
-        }
+        $userSiteRepository->remove($user, true);
 
-        if (strval($this->getUser()->getId()) !== $id && !$this->security->isGranted('ROLE_ADMIN')) {
-            return $this->redirect($request->headers->get('referer'));
-        }
-
-        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
-            $userSiteRepository->remove($user, true);
-        }
-
-        return $this->redirectToRoute('app_user_site_index', [], Response::HTTP_SEE_OTHER);
+        return $this->json(['message' => 'La suppression de votre compte a ete realise avec succes']);
     }
 
     #[Route('{id}/subscription', name: 'app_user_site_subscription', methods: ['POST'])]
-    public function subscription(Request $request, UserSite $user)
+    public function subscription(Request $request, UserSite $user, EntityManagerInterface $entityManager)
     {
-        $dateStart = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
-        $typeSubscription = $request->request->get('subscription');
+        if ($this->isGranted('ROLE_SUBSCRIBER')) {
+            return $this->json(['message' => 'Vous vous etes deja abonne']);
+        } else {
+            $dateStart = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+            $typeSubscription = $request->request->get('subscription');
 
-        switch($typeSubscription) {
-            case 'freeTrial':
-                $dateEnd = $dateStart->modify('+1 month');
-                $type = 'Free trial';
-                $amount = 0;
-                break;
-            case 'monthly':
-                $dateEnd = $dateStart->modify('+1 month');
-                $type = 'Monthly';
-                $amount = 20;
-                break;
-            case 'yearly':
-                $dateEnd = $dateStart->modify('+1 year');
-                $type = 'Yearly';
-                $amount = 190;
+            switch($typeSubscription) {
+                case 'freeTrial':
+                    if ($user->isFreeTrialUsed()) {
+                        return $this->json(['message' => 'L\'essai gratuit n\'est plus disponible']);
+                    } else {
+                        $dateEnd = $dateStart->modify('+1 month');
+                        $type = 'Free trial';
+                        $amount = 0;
+                        $user->setFreeTrialUsed(true);
+                        break;
+                    }
+                case 'monthly':
+                    $dateEnd = $dateStart->modify('+1 month');
+                    $type = 'Monthly';
+                    $amount = 20;
+                    break;
+                case 'yearly':
+                    $dateEnd = $dateStart->modify('+1 year');
+                    $type = 'Yearly';
+                    $amount = 190;
+            }
+
+            $user->setExpirationDate($dateEnd);
+            $user->setRoles(['ROLE_SUBSCRIBER']);
+
+            $subscription = new Subscription;
+            $subscription->setUserSite($user)
+                ->setDateStart($dateStart)
+                ->setDateEnd($dateEnd)
+                ->setType($type);
+            ;
+            $entityManager->persist($subscription);
+
+            $invoice = new Invoice;
+            $invoice->setDateInvoice($dateStart)
+                ->setAmount($amount)
+            ;
+            $entityManager->persist($invoice);
+            $subscription->setInvoice($invoice);
+            $entityManager->flush();
+
+            return $this->json(['message' => 'Vous etes maintenant abonne']);
         }
-
-        $user->setDateExpiration($dateEnd);
-        array_push($user->getRoles(), 'SUBSCRIBER');
-
-        $subscription = new Subscription;
-        $subscription->setUserSite($user)
-            ->setDateStart($dateStart)
-            ->setDateEnd($dateEnd)
-            ->setType($type);
-        ;
-        $entityManager->persist($subscription);
-
-        $invoice = new Invoice;
-        $invoice->setDateInvoice($dateStart)
-            ->setAmount($amount)
-        ;
-        $entityManager->persist($invoice);
-        $subscription->setInvoice($invoice);
-        $entityManager->flush();
-
-        return $this->json(['message' => 'Vous êtes maintenant abonné']);
     }
 }

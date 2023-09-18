@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Course;
 use App\Repository\CourseRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use App\Security\LoginFormAuthenticator;
+use Symfony\Component\HttpFoundation\Request;
 
 #[Route('/course')]
 class CourseController extends AbstractController
@@ -40,7 +42,7 @@ class CourseController extends AbstractController
         $entityManager->flush();
 
         return $this->json([
-            'message' => 'Votre nouveau cours est créé'
+            'message' => 'Votre nouveau cours est cree'
         ]);
     }
 
@@ -53,13 +55,13 @@ class CourseController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_course_update_api', methods: ['POST'])]
-    public function update(Request $request, Course $course): Response
+    public function update(EntityManagerInterface $entityManager, Request $request, Course $course): Response
     {
         $course->setTitle($request->request->get('title'))
             ->setContent($request->request->get('content'));
 
         $entityManager->flush();
 
-        return $this->json(['message' => 'La modification de votre cours a été réalisé avec succés']);
+        return $this->json(['message' => 'La modification de votre cours a ete realise avec succes']);
     }
 }
