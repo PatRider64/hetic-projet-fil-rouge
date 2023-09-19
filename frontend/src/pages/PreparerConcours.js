@@ -12,10 +12,13 @@ function preparerC () {
                 cName="hero"
                 MusiSaline="./assets/monsieur.jpg"
                 title="Vous préparez un concours ? Vous cherchez des informations sur une oeuvre, un compositeur, un jury ? Vous souhaitez connaitre les académies près de chez vous ?"
-                text="Développez votre carrière grâce à un ensemble de ressources : concours, académies, institutions, musiciens... réunis en seul endroit par la Saline royale Academy. "
-
+                text="Développez votre carrière grâce à un ensemble de ressources: concours, académies, institutions, musiciens... réunis en seul endroit par la Saline royale Academy. "
+                buttonText="S'inscrire à l'académie"
+                url="/"
+                btnClass="show"
                 
             />
+            
             <Newsletter/>
             <Footer/>
         </div>
