@@ -4,12 +4,15 @@ namespace App\Controller;
 
 use App\Entity\MusicSheet;
 use App\Repository\MusicSheetRepository;
+use App\Repository\CompositorRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\UploadHelper;
+use Symfony\Component\HttpFoundation\Request;
 
 #[Route('/music_sheet')]
 class MusicSheetController extends AbstractController
@@ -22,21 +25,26 @@ class MusicSheetController extends AbstractController
         ], 200, [], ['groups' => 'main']);
     }
 
-    #[Route('/create', name:'app_music_sheet_create', methods:['POST'])]
-    public function create(Request $request, EntityManagerInterface $entityManager, UploadHelper $helper): Response
+    #[Route('/create', name:'app_music_sheet_create_api', methods:['POST'])]
+    public function create(Request $request, EntityManagerInterface $entityManager, UploadHelper $helper,
+    CompositorRepository $compositorRepository): Response
     {
-        $file = $request->request->get('music_sheet');
+        $file = $request->files->get('musicSheet');
         $musicSheetName = $helper->uploadMusicSheet($file);
         $originalMusicSheetName = $file->getClientOriginalName();
+        $compositorId = $request->request->get('compositor');
+        $compositor = $compositorRepository->findBy(['id' => $compositorId])[0];
 
         $musicSheet = new MusicSheet();
-        $musicSheet->setCompositor($request->request->get('compositor'))
+        $musicSheet->setCompositor($compositor)
             ->setFileName($musicSheetName)
             ->setOriginalFileName($originalMusicSheetName)
             ->setMimeType($file->getMimeType());
 
         $entityManager->persist($musicSheet);
         $entityManager->flush();
+
+        return $this->json(['message' => 'Partition creee']);
     }
 
     #[Route('/{id}/download', name: 'app_music_sheet_download', methods: ['GET'])]

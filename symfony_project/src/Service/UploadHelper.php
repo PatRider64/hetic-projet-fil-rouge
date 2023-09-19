@@ -13,7 +13,6 @@ class UploadHelper
     const MUSIC_SHEET_PATH = 'uploads/music_sheet';
     const DEFAULT_IMAGE_PATH = 'images/image-placeholder.jpg';
 
-    public string $publicPath;
     private FilesystemOperator $defaultStorage;
 
     public function __construct(FilesystemOperator $defaultStorage)
@@ -29,7 +28,7 @@ class UploadHelper
         
         $stream = fopen($file->getPathName(), 'r');
         $this->defaultStorage->writeStream(
-            '/' . self::MUSIC_SHEET_PATH . '/' . $fileName,
+            self::MUSIC_SHEET_PATH . '/' . $fileName,
             $stream
         );
 
@@ -53,7 +52,7 @@ class UploadHelper
         
         $stream = fopen($file->getPathName(), 'r');
         $this->defaultStorage->writeStream(
-            '/' . self::MUSIC_SHEET_PATH . '/' . $fileName,
+            self::MUSIC_SHEET_PATH . '/' . $fileName,
             $stream
         );
 

@@ -124,6 +124,6 @@ class MusicSheet
 
     public function getFilePath(): string
     {
-        return '/' . UploadHelper::MUSIC_SHEET_PATH . '/' . $this->getFilename();
+        return UploadHelper::MUSIC_SHEET_PATH . '/' . $this->getFilename();
     }
 }
