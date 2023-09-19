@@ -35,11 +35,11 @@ function SignUp() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6 space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Créer un nouveau compte</h2>
+          <h2 className="text-center text-3xl font-extrabold text-gray-900">Créer un nouveau compte</h2>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <input type="hidden" name="remember" defaultValue="true" />
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
@@ -55,7 +55,7 @@ function SignUp() {
                 value={formData.name}
                 onChange={handleChange}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Name"
+                placeholder="Nom"
               />
             </div>
             <div>
@@ -71,7 +71,7 @@ function SignUp() {
                 value={formData.firstName}
                 onChange={handleChange}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="First Name"
+                placeholder="Prénom"
               />
             </div>
             <div>
@@ -87,7 +87,7 @@ function SignUp() {
                 value={formData.email}
                 onChange={handleChange}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
+                placeholder="Email"
               />
             </div>
             <div>
@@ -103,7 +103,7 @@ function SignUp() {
                 value={formData.password}
                 onChange={handleChange}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
+                placeholder="Mot de passe"
               />
             </div>
           </div>
@@ -119,7 +119,7 @@ function SignUp() {
               onChange={handleChange}
               className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             >
-              <option value="STUDENT">Elève</option>
+              <option value="ROLE_STUDENT">Elève</option>
               {/* Ajoutez d'autres options pour les types de compte si nécessaire */}
             </select>
           </div>

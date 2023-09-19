@@ -8,7 +8,9 @@ module.exports = {
     extend: {},
     colors: {
       'fushia': '#BB29BB',
+   
     }
+    
   },
   plugins: [],
 }
