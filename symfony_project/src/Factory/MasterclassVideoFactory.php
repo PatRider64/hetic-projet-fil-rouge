@@ -53,7 +53,7 @@ final class MasterclassVideoFactory extends ModelFactory
 
         return [
             'fileName' => $masterclassVideoName,
-            'originalFileName' => $masterclassVideoName,
+            'originalFileName' => $originalMasterclassVideoName,
             'mimeType' => 'video/mp4'
         ];
     }
