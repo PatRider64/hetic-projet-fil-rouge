@@ -18,13 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
 class MasterclassController extends AbstractController
 {
     #[Route('/', name: 'app_masterclass_index')]
-    public function index(MasterclassRepository $masterclassRepository, MusicSheetRepository $musicSheetRepository,
-    UserSiteRepository $userRepository): Response
+    public function index(MasterclassRepository $masterclassRepository): Response
     {
-        return $this->render('masterclass/index.html.twig', [
-            'students' => $userRepository->findAll(),
-            'musicSheets' => $musicSheetRepository->findAll()
-        ]);
         return $this->json([
             'masterclasses' => $masterclassRepository->findAll()
         ], 200, [], ['groups' => 'main']);
