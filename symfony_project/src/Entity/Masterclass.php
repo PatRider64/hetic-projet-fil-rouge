@@ -30,6 +30,9 @@ class Masterclass
     #[ORM\ManyToOne(inversedBy: 'masterclass')]
     private ?MusicSheet $musicSheet = null;
 
+    #[ORM\OneToOne(mappedBy: 'masterclass', cascade: ['persist', 'remove'])]
+    private ?MasterclassVideo $masterclassVideo = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -79,6 +82,28 @@ class Masterclass
     public function setMusicSheet(?MusicSheet $musicSheet): static
     {
         $this->musicSheet = $musicSheet;
+
+        return $this;
+    }
+
+    public function getMasterclassVideo(): ?MasterclassVideo
+    {
+        return $this->masterclassVideo;
+    }
+
+    public function setMasterclassVideo(?MasterclassVideo $masterclassVideo): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($masterclassVideo === null && $this->masterclassVideo !== null) {
+            $this->masterclassVideo->setMasterclass(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($masterclassVideo !== null && $masterclassVideo->getMasterclass() !== $this) {
+            $masterclassVideo->setMasterclass($this);
+        }
+
+        $this->masterclassVideo = $masterclassVideo;
 
         return $this;
     }

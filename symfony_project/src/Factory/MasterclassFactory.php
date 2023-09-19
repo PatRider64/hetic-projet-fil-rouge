@@ -61,7 +61,8 @@ final class MasterclassFactory extends ModelFactory
             'analysis' => self::faker()->text(),
             'instruments' => self::faker()->randomElement(self::$instruments),
             'student' => self::faker()->randomElement($students),
-            'musicSheet' => MusicSheetFactory::random()
+            'musicSheet' => MusicSheetFactory::random(),
+            'masterclassVideo' => MasterclassVideoFactory::random()
         ];
     }
 

@@ -53,7 +53,7 @@ final class MusicSheetFactory extends ModelFactory
     protected function getDefaults(): array
     {
         $originalMusicSheetName = self::faker()->randomElement(self::$templateSheet);
-        $musicSheetName = $this->helper->fixtureUpload(
+        $musicSheetName = $this->helper->fixtureMusicSheetUpload(
             new File(__DIR__ . '/Template_images/' . $originalMusicSheetName)
         );
 

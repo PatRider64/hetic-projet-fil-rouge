@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Masterclass;
+use App\Entity\MasterclassVideo;
 use App\Repository\MasterclassRepository;
 use App\Repository\UserSiteRepository;
 use App\Repository\MusicSheetRepository;
@@ -10,14 +11,20 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\UploadHelper;
 use Symfony\Component\HttpFoundation\Request;
 
 #[Route('/masterclass')]
 class MasterclassController extends AbstractController
 {
     #[Route('/', name: 'app_masterclass_index')]
-    public function index(MasterclassRepository $masterclassRepository): Response
+    public function index(MasterclassRepository $masterclassRepository, MusicSheetRepository $musicSheetRepository,
+    UserSiteRepository $userRepository): Response
     {
+        return $this->render('masterclass/index.html.twig', [
+            'students' => $userRepository->findAll(),
+            'musicSheets' => $musicSheetRepository->findAll()
+        ]);
         return $this->json([
             'masterclasses' => $masterclassRepository->findAll()
         ], 200, [], ['groups' => 'main']);
@@ -25,7 +32,7 @@ class MasterclassController extends AbstractController
 
     #[Route('/create', name: 'app_masterclass_create_api', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager, UserSiteRepository $userRepository,
-    MusicSheetRepository $musicSheetRepository): Response 
+    MusicSheetRepository $musicSheetRepository, UploadHelper $helper): Response 
     {
         $masterclass = new Masterclass();
         $studentId = $request->request->get('student');
@@ -33,10 +40,21 @@ class MasterclassController extends AbstractController
         $student = $userRepository->findBy(['id' => $studentId])[0];
         $musicSheet = $musicSheetRepository->findBy(['id' => $musicSheetId])[0];
 
+        $fileVideo = $request->files->get('video');
+        $videoName = $helper->uploadMasterclassVideo($fileVideo);
+        $originalVideoName = $fileVideo->getClientOriginalName();
+
+        $masterclassVideo = new MasterclassVideo();
+        $masterclassVideo->setFileName($videoName)
+            ->setOriginalFileName($originalVideoName)
+            ->setMimeType($fileVideo->getMimeType());
+        $entityManager->persist($masterclassVideo);
+
         $masterclass->setAnalysis($request->request->get('analysis'))
             ->setInstruments($request->request->get('instruments'))
             ->setStudent($student)
-            ->setMusicSheet($musicSheet);
+            ->setMusicSheet($musicSheet)
+            ->setMasterclassVideo($masterclassVideo);
 
         $entityManager->persist($masterclass);
         $entityManager->flush();
