@@ -1,5 +1,5 @@
-// src/SignUp.jsx
 import React, { useState } from 'react';
+import axios from 'axios'; // Importez Axios pour effectuer des requêtes HTTP
 
 function SignUp() {
   const [formData, setFormData] = useState({
@@ -7,7 +7,7 @@ function SignUp() {
     firstName: '',
     email: '',
     password: '',
-    type: 'STUDENT', 
+    type: 'ROLE_STUDENT', // Assurez-vous que le type correspond au rôle Symfony
   });
 
   const handleChange = (e) => {
@@ -18,19 +18,26 @@ function SignUp() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Envoyez les données d'inscription au contrôleur Symfony correspondant via une requête HTTP (par exemple, avec Axios ou Fetch).
+    try {
+      // Effectuez une requête HTTP POST pour créer un utilisateur
+      const response = await axios.post('/user_site/create', formData);
 
-    // Réinitialisez les champs du formulaire après inscription.
-    setFormData({
-      name: '',
-      firstName: '',
-      email: '',
-      password: '',
-      type: 'STUDENT', // Réinitialisez le type si nécessaire.
-    });
+      // Réinitialisez les champs du formulaire après inscription en cas de succès
+      setFormData({
+        name: '',
+        firstName: '',
+        email: '',
+        password: '',
+        type: 'ROLE_STUDENT',
+      });
+
+      console.log('Inscription réussie!', response.data.message);
+    } catch (error) {
+      console.error('Erreur lors de l\'inscription:', error);
+    }
   };
 
   return (
@@ -120,7 +127,8 @@ function SignUp() {
               className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             >
               <option value="ROLE_STUDENT">Elève</option>
-              {/* Ajoutez d'autres options pour les types de compte si nécessaire */}
+              <option value="ROLE_TEACHER">Professeur</option> 
+
             </select>
           </div>
 

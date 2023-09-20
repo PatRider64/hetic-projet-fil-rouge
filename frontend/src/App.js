@@ -1,17 +1,16 @@
 // import logo from './logo.svg';
+import './styles.css'
+import 'tailwindcss/tailwind.css';
 import './App.css';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./styles.css";
-import 'tailwindcss/tailwind.css'; 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import Home from './pages/Home';
 import Masterclass from './pages/MasterclassV';
 import NotreAcademie from './pages/NotreAcademie';
 import PreparerConcours from './pages/PreparerConcours';
 import LogIn from './pages/LogIn';
 import SignIn from './pages/SignUp';
+
 
  export default function App () {
    return (
@@ -23,12 +22,14 @@ import SignIn from './pages/SignUp';
         <Route path= "/preparer" element={<PreparerConcours/>}/>
         <Route path= "connexion" element={<LogIn/>}/>
         <Route path= "/enregistrer" element={<SignIn/>}/>
+
+
       </Routes>
 
       
 
     </div>
-
+ 
   );
 
 };

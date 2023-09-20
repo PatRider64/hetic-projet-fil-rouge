@@ -2,7 +2,6 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import Plateforme from "../components/Plateforme";
-// import MasterImg from "../assets/piano.jpg";
 import Footer from "../components/Footer";
 import Professeurs from "../components/Professeurs";
 
