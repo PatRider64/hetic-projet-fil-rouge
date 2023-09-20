@@ -1,10 +1,10 @@
 import React from "react";
 
 const EnSavoirPlus = () => {
-    // Définir l'icône Font Awesome à utiliser
-    const iconeFontawesome = "fa-regular fa-circle-check"; // Icône à répéter
 
-    // Définir un tableau de contenus de paragraphes
+    const iconeFontawesome = "fa-regular fa-circle-check"; 
+
+
     const contenus = [
         "S'habituer aux caméras et au public",
         "Travailler dans des conditions proches des concerts et des concours",
@@ -12,7 +12,7 @@ const EnSavoirPlus = () => {
         "Figurer aux côtés des plus grands maîtres sur une plateforme internationnale"
     ];
 
-    // Générer une liste de paragraphes avec l'icône répétée et le contenu variable
+
     const paragraphes = contenus.map((contenu, index) => (
         <div className="flex items-center justify-center" key={index}>
             <i className={`mr-2 text-[#BB29BB] ${iconeFontawesome}`}></i>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Importez Axios pour effectuer des requêtes HTTP
+import axios from 'axios'; 
 
 function SignUp() {
   const [formData, setFormData] = useState({
@@ -7,7 +7,7 @@ function SignUp() {
     firstName: '',
     email: '',
     password: '',
-    type: 'ROLE_STUDENT', // Assurez-vous que le type correspond au rôle Symfony
+    type: 'ROLE_STUDENT', 
   });
 
   const handleChange = (e) => {
@@ -22,10 +22,10 @@ function SignUp() {
     e.preventDefault();
 
     try {
-      // Effectuez une requête HTTP POST pour créer un utilisateur
+   
       const response = await axios.post('/user_site/create', formData);
 
-      // Réinitialisez les champs du formulaire après inscription en cas de succès
+
       setFormData({
         name: '',
         firstName: '',

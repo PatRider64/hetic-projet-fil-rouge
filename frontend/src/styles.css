@@ -16,22 +16,21 @@ button {
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
-  box-sizing: border-box; /* Utilisation de box-sizing: border-box par défaut */
+  box-sizing: border-box; 
 }
 
-/* Réinitialisation des styles de liste */
+
 ul,
 ol {
   list-style: none;
 }
 
-/* Réinitialisation des styles de lien */
+
 a {
   text-decoration: none;
   color: inherit;
 }
 
-/* Réinitialisation des éléments HTML interactifs */
 button,
 input,
 textarea,
@@ -40,7 +39,7 @@ select {
   font-size: inherit;
 }
 
-/* Réinitialisation des éléments de formulaire */
+
 button,
 input[type="button"],
 input[type="reset"],
@@ -67,7 +66,7 @@ textarea {
   resize: none;
 }
 
-/* Styles de base pour les éléments de formulaire */
+
 input[type="text"],
 input[type="password"],
 textarea {
@@ -77,7 +76,7 @@ textarea {
   border-radius: 4px;
 }
 
-/* Styles pour les boutons */
+
 button,
 input[type="button"],
 input[type="reset"],
@@ -99,7 +98,3 @@ input[type="reset"]:hover,
 input[type="submit"]:hover {
   background-color: #0056b3;
 }
-
-/* Ajoutez d'autres styles ou réinitialisations spécifiques à votre application ici */
-
-/* ... */

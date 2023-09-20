@@ -1,7 +1,6 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
-// import MasterImg from "../assets/piano.jpg";
 import NotreHistoire from "../components/NotreHistoire";
 import Footer from "../components/Footer";
 import Newsletter from "../components/Newsletter";

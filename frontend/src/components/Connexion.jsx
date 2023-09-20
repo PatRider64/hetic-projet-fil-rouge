@@ -7,7 +7,7 @@ function Connexion() {
     email: '',
     password: '',
   });
-  const [error, setError] = useState(null); // Ajoutez un état pour stocker les erreurs
+  const [error, setError] = useState(null); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,18 +20,17 @@ function Connexion() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Envoyer les données de connexion au backend
     axios
       .post('/login_check', formData)
       .then((response) => {
-        // Si la connexion réussit, réinitialisez les erreurs
+
         setError(null);
         console.log('Réponse du backend :', response.data);
-        // Rediriger l'utilisateur vers une autre page après la connexion réussie
+
         window.location.href = '/'; 
       })
       .catch((error) => {
-        // Si la connexion échoue, affichez un message d'erreur
+
         setError('Erreur lors de la connexion. Vérifiez vos identifiants.');
         console.error('Erreur lors de la connexion :', error);
       });
@@ -66,7 +65,7 @@ function Connexion() {
                 onChange={handleChange}
               />
             </div>
-            {error && <p className="text-red-500 mb-4">{error}</p>} {/* Affichez l'erreur ici */}
+            {error && <p className="text-red-500 mb-4">{error}</p>} 
             <button
               type="submit"
               className="bg-[#c9c6c655] text-black px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
@@ -80,7 +79,6 @@ function Connexion() {
   );
   
 }
-// "border w-full my-5 py-2 bg-[#BB29BB ]-600 hovr:bg-indigo-500 text-white"
 
 export default Connexion;
 
