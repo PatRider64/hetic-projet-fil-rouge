@@ -1,6 +1,5 @@
 import React from "react";
-import { defer } from "react-router-dom";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+
 
 const Offres = () => {
     return (

@@ -9,7 +9,6 @@ function signIn () {
     return (
         <div>
             <Navbar/>
-            <h1></h1>
             <SignUp/>
             <Footer/>
         
