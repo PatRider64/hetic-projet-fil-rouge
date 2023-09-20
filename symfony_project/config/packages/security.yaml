@@ -38,9 +38,9 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/app_user_site_show, roles: ROLE_USER }
-        - { path: ^/app_course, roles: ROLE_SUBSCRIBER }
-        - { path: ^/app_masterclass, roles: ROLE_SUBSCRIBER }
-        - { path: ^/app_chat, roles: ROLE_SUBSCRIBER }
+        - { path: ^/app_course, roles: ROLE_USER }
+        - { path: ^/app_masterclass, roles: ROLE_USER }
+        - { path: ^/app_chat, roles: ROLE_USER }
         - { path: ^/, roles: PUBLIC_ACCESS }
 
 when@test:
