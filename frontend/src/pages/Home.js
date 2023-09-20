@@ -6,7 +6,6 @@ import Phrases from "../components/Phrases";
 import Footer from "../components/Footer";
 import EnSavoirPlus from "../components/EnSavoirPlus";
 import Offres from "../components/Offres";
-import Faq from "../components/Faq";
 import Newsletter from "../components/Newsletter";
 
 
@@ -50,19 +49,7 @@ function Home () {
             <Phrases/>
             <EnSavoirPlus/>
             <Offres/>
-            <div className="bg-[f2f2f2] h-screen flex justify-center items-center">
-                <div className="list">
-                  {list.map((item, key) => (
-                    
-                    <Faq key={key} data={item}/>
-                    
-                  ))}
-
-                </div>
-
-            </div>
-      
-            <Newsletter/>
+           <Newsletter/>
             <Footer/>
             
              
